@@ -2,16 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "¡Hola, OpenWebinars!")
+func main() {
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/about", aboutHandler)
+	http.HandleFunc("/contact", contactHandler)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func main() {
-	http.HandleFunc("/", handler)
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "¡Bienvenido a la página de inicio!")
+}
 
-	fmt.Println("Servidor está corriendo en http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Esta es la página 'Acerca de nosotros'")
+}
+
+func contactHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Póngase en contacto con nosotros en jersonmartinez.com")
 }
