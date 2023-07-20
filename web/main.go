@@ -35,11 +35,11 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{
 		Title: "OpenWebinars / Jerson",
 		Message: template.HTML(`
-			La plataforma donde encontrarás el curso <b>"Mi primera página web en Go"</b> impartido por el Ing. DevOps, Jerson Martínez. Recibido por los estudiantes más inteligentes de la plataforma."
+			La plataforma donde encontrarás el curso <b>"Mi primera página web en Go"</b> impartido por el Ing. DevOps, Jerson Martínez. Recibido por los estudiantes más inteligentes de la plataforma.
 		`),
 	}
 
-	tmplFile := filepath.Join("web/templates/", "home.html")
+	tmplFile := filepath.Join("web/templates/", "index.html")
 	renderTemplate(w, tmplFile, data)
 }
 
