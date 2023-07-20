@@ -1,0 +1,10 @@
+# .air.toml
+
+root = "."
+
+[build]
+    cmd = "go build -o ./tmp/main.exe ./web/"
+    watch =["web", "internal", "cmd"]
+
+[run]
+    executable = "./tmp/main.exe"

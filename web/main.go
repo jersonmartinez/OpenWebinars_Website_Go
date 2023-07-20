@@ -2,28 +2,65 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
-func main() {
-	http.HandleFunc("/", homeHandler)
-	http.HandleFunc("/products", productsHandler)
-	http.HandleFunc("/products/detail/", productDetailHandler)
+type PageData struct {
+	Title        string
+	Message      template.HTML
+	ErrorCode    int
+	ErrorMessage string
+}
 
-	fmt.Println("Servidor corriendo en http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func renderTemplate(w http.ResponseWriter, tmplFile string, data PageData) {
+	tmpl, err := template.ParseFiles(tmplFile)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "¡Bienvenido a la página de inicio!")
+	data := PageData{
+		Title: "OpenWebinars / Jerson",
+		Message: template.HTML(`
+			La plataforma donde encontrarás el curso <b>"Mi primera página web en Go"</b> impartido por el Ing. DevOps, Jerson Martínez. Recibido por los estudiantes más inteligentes de la plataforma."
+		`),
+	}
+
+	tmplFile := filepath.Join("web/templates/", "home.html")
+	renderTemplate(w, tmplFile, data)
 }
 
-func productsHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Aquí se muestran todos los productos disponibles")
+func errorHandler(w http.ResponseWriter, r *http.Request) {
+	data := PageData{
+		Title:        "Error 404",
+		ErrorCode:    500,
+		ErrorMessage: "¡Página no encontrada!",
+	}
+
+	tmplFile := filepath.Join("web/templates/", "error.html")
+	renderTemplate(w, tmplFile, data)
 }
 
-func productDetailHandler(w http.ResponseWriter, r *http.Request) {
-	productID := r.URL.Path[len("/products/detail/"):]
-	fmt.Fprintf(w, "Detalles del producto con ID: %s", productID)
+func main() {
+	fs := http.FileServer(http.Dir("web/static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/error", errorHandler)
+
+	fmt.Println("Servidor corriendo en http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
