@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jersonmartinezsm/OpenWebinars/internal/models"
+	"github.com/jersonmartinez/OpenWebinars_Website_Go/internal/models"
 )
 
 func renderTemplate(w http.ResponseWriter, tmplFile string, data interface{}) {
