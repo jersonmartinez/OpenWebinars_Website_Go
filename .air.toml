@@ -3,7 +3,7 @@
 root = "."
 
 [build]
-    cmd = "go build -o ./tmp/main.exe ./web/"
+    cmd = "go build -o ./tmp/main.exe ./cmd/main/"
     watch =["web", "internal", "cmd"]
 
 [run]
