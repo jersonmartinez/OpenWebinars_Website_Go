@@ -24,7 +24,7 @@ func renderTemplate(w http.ResponseWriter, tmplFile string, data interface{}) {
 	}
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.PageData{
 		Title:   "OpenWebinars",
 		Author:  "Jerson Martínez",
@@ -49,7 +49,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, tmplFile, data)
 }
 
-func errorHandler(w http.ResponseWriter, r *http.Request) {
+func ErrorHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.PageData{
 		Title:        "¡Página no encontrada!",
 		ErrorCode:    http.StatusInternalServerError,
